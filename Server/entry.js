@@ -4,17 +4,6 @@ const app = express();
 const port = process.env.LISTENING_PORT;
 const serverOrigin = process.env.SERVER_ORIGIN;
 
-// require your controllers
-const PageController = require('./Controllers/PageController');
-
-// Register the mounts and routers
-const pageController = new PageController();
-
-app.use(pageController.mount, pageController.router);
-
-
-
-
 // HEADERS, SECURITY, AND ADVANCED STUFF
 //________________________________________________________________________________________________________
 //________________________________________________________________________________________________________
@@ -80,6 +69,14 @@ app.use((req, res, next) => {
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// require your controllers
+const PageController = require('./Controllers/PageController');
+
+// Register the mounts and routers
+const pageController = new PageController();
+
+app.use(pageController.mount, pageController.router);
 
 app.listen(port, () => {
   console.log(`Server is running on ${serverOrigin}:${port}`);
