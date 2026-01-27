@@ -4,6 +4,14 @@ const app = express();
 const port = process.env.LISTENING_PORT;
 const serverOrigin = process.env.SERVER_ORIGIN;
 
+console.log('ENV CHECK:', {
+  LISTENING_PORT: process.env.LISTENING_PORT,
+  PORT: process.env.PORT,
+  SERVER_ORIGIN: process.env.SERVER_ORIGIN,
+  NODE_ENV: process.env.NODE_ENV,
+});
+
+
 // HEADERS, SECURITY, AND ADVANCED STUFF
 //________________________________________________________________________________________________________
 //________________________________________________________________________________________________________
