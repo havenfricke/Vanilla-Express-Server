@@ -1,8 +1,8 @@
 ### EXPRESS SERVER - HAVEN FRICKE
-- dotenv: ^16.4.7
-- express: ^4.21.2
-- multer: 1.4.5-lts.1
-- mysql2: ^3.12.0
+- dotenv
+- express
+- multer
+- mysql2
 
 ### SETUP
 - Create .env file
