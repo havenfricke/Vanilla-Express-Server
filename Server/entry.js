@@ -79,12 +79,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // require your controllers
-const PageController = require('./Controllers/PageController');
+const ExampleController = require('./Controllers/ExampleController');
 
 // Register the mounts and routers
-const pageController = new PageController();
+const exampleController = new ExampleController();
 
-app.use(pageController.mount, pageController.router);
+app.use(exampleController.mount, exampleController.router);
 
 app.listen(port, () => {
   console.log(`Server is running on ${serverOrigin}:${port}`);

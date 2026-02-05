@@ -1,6 +1,6 @@
 const multer = require('multer')
 const path = require('path')
-const pageService = require('../Services/PageService')
+const exampleService = require('../Services/ExampleService')
 const BaseController = require('../Utils/BaseController')
 
 // Configure multer for file uploads
@@ -22,65 +22,65 @@ const upload = multer({
   }
 })
 
-class PageController extends BaseController {
+class ExampleController extends BaseController {
   constructor() {
-    super('api/pages')
+    super('/examples')
     // Register the routes
     this.router
-      .get('', upload.none(), this.getAllPages)
-      .get('/:id', upload.none(), this.getPageById)
-      .post('', upload.none(), this.createPage)
-      .put('', upload.none(), this.editPage)
-      .delete('/:id', upload.none(), this.deletePage)
+      .get('', upload.none(), this.getAllExamples)
+      .get('/:id', upload.none(), this.getExampleById)
+      .post('', upload.none(), this.createExample)
+      .put('', upload.none(), this.editExample)
+      .delete('/:id', upload.none(), this.deleteExample)
   }
 
-  async getAllPages(req, res, next) {
+  async getAllExamples(req, res, next) {
     try {
-      const pages = await pageService.getAllPages(req.query)
-      res.json({ data: pages })
+      const examples = await exampleService.getAllExamples(req.query)
+      res.json({ data: examples })
     } catch (error) {
       next(error)
     }
   }
 
-  async getPageById(req, res, next) {
+  async getExampleById(req, res, next) {
     try {
-      const page = await pageService.getPageById(req.params.id)
-      res.json({ data: page })
+      const example = await exampleService.getExampleById(req.params.id)
+      res.json({ data: example })
     } catch (error) {
       next(error)
     }
   }
 
-  async createPage(req, res, next) {
+  async createExample(req, res, next) {
     try {
-      const newPage = await pageService.createPage(req.body)
-      res.status(201).json({ data: newPage })
+      const newExample = await exampleService.createExample(req.body)
+      res.status(201).json({ data: newExample })
     } catch (error) {
       next(error)
     }
   }
 
-  async editPage(req, res, next){
+  async editExample(req, res, next){
     try {
-      const page = await pageService.editPage(req.body);
-      res.json({ data: page })
+      const example = await exampleService.editExample(req.body);
+      res.json({ data: example })
     } catch (error){
       next(error);
     }
   }
 
-  async deletePage(req, res, next) {
+  async deleteExample(req, res, next) {
     try {
-      const result = await pageService.deletePage(req.params.id, req.body.creatorId);
-      res.json({ data: result });
+      const example = await exampleService.deleteExample(req.params.id, req.body.creatorId);
+      res.json({ data: example });
     } catch (error) {
       next(error);
     }
   }
 }
 
-module.exports = PageController
+module.exports = ExampleController
 
 // In Express, the incoming request data is 
 // separated into different objects based on 
@@ -89,7 +89,7 @@ module.exports = PageController
 // req.params:
 // This object contains route parameters—parts 
 // of the URL that are defined in your route path. 
-// For example, if you define a route as /pages/:id, 
+// For example, if you define a route as /examples/:id, 
 // the value of :id is accessible via req.params.id.
 
 // req.body:

@@ -1,9 +1,9 @@
-class Page {
+class Example {
     constructor(id, name) {
       this.id = id;
       this.name = name;
     }
   }
   
-  module.exports = Page;
+  module.exports = Example;
   
