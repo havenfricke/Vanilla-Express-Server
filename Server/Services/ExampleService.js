@@ -36,8 +36,8 @@ async function editExample(update) {
 }
 
 async function deleteExample(id) {
-  const original = await exampleRepository.getExampleById(id);
-  if (!original) {
+  const example = await exampleRepository.getExampleById(id);
+  if (!example) {
     throw new Error("Example not found");
   }
   await exampleRepository.deleteExample(id);
