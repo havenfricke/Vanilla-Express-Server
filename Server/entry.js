@@ -1,33 +1,27 @@
-require('dotenv').config(); 
+// entry.js
+require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const app = express();
-const port = process.env.LISTENING_PORT;
+const port = process.env.LISTENING_PORT || 3000;
 const serverOrigin = process.env.SERVER_ORIGIN;
 
-console.log('ENV CHECK:', {
-  LISTENING_PORT: process.env.LISTENING_PORT,
-  PORT: process.env.PORT,
-  SERVER_ORIGIN: process.env.SERVER_ORIGIN,
-  NODE_ENV: process.env.NODE_ENV,
-});
-
-
-// HEADERS, SECURITY, AND ADVANCED STUFF
+// HEADERS, SECURITY, AND ADVANCED 
 //________________________________________________________________________________________________________
 //________________________________________________________________________________________________________
 
-
 // allowed domains from the environment variable
-// allowed domains from the environment variable
-let allowedDomains;
+let allowedDomains = [];
 
-if (process.env.NODE_ENV !== 'production') {
-  // if dev use wildcard
+try {
+  allowedDomains = process.env.CORS_ALLOWED_DOMAINS;
+} catch (error) {
+  console.error('[CORS_ALLOWED_DOMAINS]:', error);
+}
+
+// allow all origins when in development
+if (process.env.NODE_ENV !== 'dev') {
   allowedDomains = ['*'];
-} else {
-  // In prod convert the .env string into a real Array
-  const rawValue = process.env.CORS_ALLOWED_DOMAINS || "";
-  allowedDomains = rawValue.split(',').map(d => d.trim()).filter(Boolean);
 }
 
 // middleware for setting security and CORS
@@ -36,7 +30,10 @@ app.use((req, res, next) => {
 
   // allow only specific origins. in development, allow all.
   if (allowedDomains.includes('*') || allowedDomains.includes(requestOrigin)) {
-    res.setHeader('Access-Control-Allow-Origin', allowedDomains.includes('*') ? '*' : requestOrigin);
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      allowedDomains.includes('*') ? '*' : requestOrigin
+    );
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -47,21 +44,17 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
 
-// Content Security Policy header is security that reduces risk with XSS and data 
-// injection by controlling sources from where content is loaded.
+  // Content Security Policy
   let cspSources;
-
-  if (process.env.NODE_ENV !== 'production') {
-    cspSources = "*"; // Less restrictive in development
-  } else {
-    cspSources = [`'self'`, ...allowedDomains.filter(url => url !== '*')].join(' ');
+  if (process.env.NODE_ENV !== 'dev') {
+    cspSources = '*'; // Less restrictive in development
   }
 
   res.setHeader(
     'Content-Security-Policy',
-    process.env.NODE_ENV !== 'production' ? 
-    "default-src * 'unsafe-inline' 'unsafe-eval'" : 
-    `default-src ${cspSources}; script-src ${cspSources}; style-src ${cspSources}`
+    process.env.NODE_ENV !== 'production'
+      ? "default-src * 'unsafe-inline' 'unsafe-eval'"
+      : `default-src ${cspSources}; script-src ${cspSources}; style-src ${cspSources}`
   );
 
   // allows browser to receive necessary headers
@@ -69,7 +62,7 @@ app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
     return res.sendStatus(204);
   }
-  
+
   next();
 });
 
@@ -80,10 +73,39 @@ app.use(express.urlencoded({ extended: true }));
 // require your controllers
 const ExampleController = require('./Controllers/ExampleController');
 
-// Register the mounts and routers
+
 const exampleController = new ExampleController();
 
+
 app.use(exampleController.mount, exampleController.router);
+
+// ─────────────────────────────────────────────
+// STATIC FILES + ROOT ROUTE
+// ─────────────────────────────────────────────
+
+app.use(express.static(__dirname + '/public'));
+
+// Webpage
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// ─────────────────────────────────────────────
+// ERROR HANDLER (keep this after all routes, including Alexa)
+// ─────────────────────────────────────────────
+
+app.use((err, req, res, next) => {
+  console.error('ERROR:', err); // shows stack + mysql error message
+  const isValidation =
+    err.message?.includes('required') ||
+    err.message?.includes('Invalid') ||
+    err.message?.includes('exceed');
+  res.status(isValidation ? 400 : 500).json({ error: err.message });
+});
+
+// ─────────────────────────────────────────────
+// SERVER START
+// ─────────────────────────────────────────────
 
 app.listen(port, () => {
   console.log(`Server is running on ${serverOrigin}:${port}`);
