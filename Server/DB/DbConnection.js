@@ -3,6 +3,7 @@ const mysql = require('mysql2/promise');
 let connection = null;
 
 async function query(sql, params) {
+  
   if (!connection) {
     connection = await mysql.createConnection({
       host: process.env.DB_CONNECTION_STRING,
@@ -11,6 +12,7 @@ async function query(sql, params) {
       database: process.env.DB_NAME
     });
   }
+
   const [results] = await connection.execute(sql, params);
   return results;
 }

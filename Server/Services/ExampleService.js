@@ -3,7 +3,7 @@ const Example = require('../Models/Example');
 const IdGen = require('../Utils/IdGen');
 
 class ExampleService {
-
+  
   async getAllExamples(queryParams) {
     const examples = await exampleRepository.getAllExamples(queryParams);
     return examples.map(examples => new Example(examples.id, examples.name));
@@ -45,7 +45,7 @@ class ExampleService {
     await exampleRepository.deleteExample(id);
     return { message: "Example deleted successfully" };
   }
-  
+
 }
 
 

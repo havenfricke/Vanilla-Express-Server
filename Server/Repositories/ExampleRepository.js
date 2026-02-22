@@ -1,6 +1,7 @@
 const db = require('../DB/DbConnection');
 
 class ExampleRepository {
+
   async getAllExamples() {
     const sql = 'SELECT * FROM examples';
     return await db.query(sql, []);
@@ -29,6 +30,7 @@ class ExampleRepository {
     const result = await db.query(sql, [id]);
     return result; 
   }
+
 }
 
 module.exports = new ExampleRepository();
