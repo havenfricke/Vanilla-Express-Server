@@ -27,7 +27,7 @@ async function editExample(update) {
   }
 
   const updatedExample = {
-    name: update.name ? update.name : original.name
+    name: update.name === original.name ? original.name : update.name
     // Add other example props here and use ternary to update
   };
 
