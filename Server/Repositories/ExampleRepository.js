@@ -15,14 +15,14 @@ class ExampleRepository {
 
   async createExample(id, body) {
     const sql = 'INSERT INTO examples (id, name) VALUES (?, ?)';
-    await db.query(sql, [id, body.name]);
-    return { id, name: body.name };
+    const result = await db.query(sql, [id, body.name]);
+    return { id: result.id, name: result.name };
   }
 
   async editExample(id, body) {
     const sql = 'UPDATE examples SET name = ? WHERE id = ?';
-    await db.query(sql, [body.name, id]);
-    return { id, name: body.name };
+    const result = await db.query(sql, [body.name, id]);
+    return { id: result.id, name: result.name };
   }
 
   async deleteExample(id) {
