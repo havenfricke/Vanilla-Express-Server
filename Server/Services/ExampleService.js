@@ -31,7 +31,7 @@ async function editExample(update) {
     // Add other example props here and use ternary to update
   };
 
-  const updated = await exampleRepository.editExample(update.id, updatedExample);
+  const updated = await exampleRepository.editExample(original.id, updatedExample);
   return new Example(updated.id, updated.name);
 }
 
