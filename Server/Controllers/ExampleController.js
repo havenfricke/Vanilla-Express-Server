@@ -30,7 +30,7 @@ class ExampleController extends BaseController {
       .get('', upload.none(), this.getAllExamples)
       .get('/:id', upload.none(), this.getExampleById)
       .post('', upload.none(), this.createExample)
-      .put('', upload.none(), this.editExample)
+      .put(':/id', upload.none(), this.editExample)
       .delete('/:id', upload.none(), this.deleteExample)
   }
 
