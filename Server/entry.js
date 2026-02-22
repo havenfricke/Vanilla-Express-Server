@@ -18,17 +18,16 @@ console.log('ENV CHECK:', {
 
 
 // allowed domains from the environment variable
-let allowedDomains = [];
+// allowed domains from the environment variable
+let allowedDomains;
 
-try {
-  allowedDomains = process.env.CORS_ALLOWED_DOMAINS;
-} catch (error) {
-  console.error('[CORS_ALLOWED_DOMAINS]:', error);
-}
-
-// allow all origins when in development
 if (process.env.NODE_ENV !== 'production') {
+  // if dev use wildcard
   allowedDomains = ['*'];
+} else {
+  // In prod convert the .env string into a real Array
+  const rawValue = process.env.CORS_ALLOWED_DOMAINS || "";
+  allowedDomains = rawValue.split(',').map(d => d.trim()).filter(Boolean);
 }
 
 // middleware for setting security and CORS
