@@ -29,7 +29,7 @@ class ExampleService {
     }
 
     const updatedExample = {
-      name: update.name === original.name ? original.name : update.name
+      name: update.name ? original.name : update.name // This is correct, don't change it
       // Add other example props here and use ternary to update
     };
 
