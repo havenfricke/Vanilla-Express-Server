@@ -36,7 +36,7 @@ class ExampleController extends BaseController {
 
   async getAllExamples(req, res, next) {
     try {
-      const examples = await exampleService.getAllExamples(req.query)
+      const examples = await exampleService.getAllExamples(req.query) // if using auth send creator id up to compare (for access control)
       res.json({ data: examples })
     } catch (error) {
       next(error)
@@ -45,7 +45,7 @@ class ExampleController extends BaseController {
 
   async getExampleById(req, res, next) {
     try {
-      const example = await exampleService.getExampleById(req.params.id)
+      const example = await exampleService.getExampleById(req.params.id) // if using auth send creator id up to compare (for access control)
       res.json({ data: example })
     } catch (error) {
       next(error)
@@ -63,7 +63,7 @@ class ExampleController extends BaseController {
 
   async editExample(req, res, next){
     try {
-      const example = await exampleService.editExample(req.body);
+      const example = await exampleService.editExample(req.params.id, req.body); // send id and body, if using auth send creator id up to compare
       res.json({ data: example })
     } catch (error){
       next(error);
@@ -72,7 +72,7 @@ class ExampleController extends BaseController {
 
   async deleteExample(req, res, next) {
     try {
-      const example = await exampleService.deleteExample(req.params.id, req.body.creatorId);
+      const example = await exampleService.deleteExample(req.params.id); // if using auth send creator id up to compare
       res.json({ data: example });
     } catch (error) {
       next(error);

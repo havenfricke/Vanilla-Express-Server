@@ -22,8 +22,8 @@ class ExampleService {
     return new Example(created.id, created.name);
   }
 
-  async editExample(update) {
-    const original = await exampleRepository.getExampleById(update.id);
+  async editExample(id, update) {
+    const original = await exampleRepository.getExampleById(id);
     if (!original) {
       throw new Error("Example not found");
     }
