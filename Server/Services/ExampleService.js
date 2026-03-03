@@ -29,10 +29,8 @@ class ExampleService {
     }
 
     const updatedExample = {
-        // if update----use update-if not--use original
-        // condition ----- if true ----- if false -----
-      name: update.name ? update.name : original.name // This is correct, don't change it
-      // Add other example props here and use ternary to update
+        // if update value == original, use original. Else, use update
+      name: update.name == original.name ? original.name : update.name 
     };
 
     const updated = await exampleRepository.editExample(original.id, updatedExample);
